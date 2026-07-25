@@ -484,6 +484,46 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
 .toast.vis { opacity: 1; }
 .toast.erro { background: var(--red); border-color: var(--red); }
 
+/* ===== PASTAS ===== */
+.pastas-section { padding: 4px 4px 10px; }
+.pastas-header-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 6px 10px; border-top: 1px solid var(--border); margin-top: 6px; }
+.pastas-titulo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 15px; color: var(--text); }
+.pastas-header-btns { display: flex; gap: 8px; }
+.pastas-btn { width: 32px; height: 32px; border-radius: 10px; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 17px; color: var(--text); line-height: 1; }
+.pastas-btn:active { background: var(--accent); color: #fff; }
+.pastas-subtitulo { font-size: 11px; color: var(--text2); padding: 4px 6px 8px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; opacity: 0.75; display: flex; align-items: center; gap: 5px; }
+.pastas-subtitulo svg { width: 12px; height: 12px; fill: var(--text2); }
+.pastas-grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
+.pasta-item { aspect-ratio: 1/1; border-radius: 14px; background: var(--surface2); border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; cursor: pointer; position: relative; padding: 8px; overflow: hidden; }
+.pasta-item.sel { outline: 3px solid var(--accent); }
+.pasta-item .check-circle { top: 7px; right: 7px; }
+.pasta-icon svg { width: 32px; height: 32px; fill: var(--accent); }
+.pasta-icon.privada svg { fill: var(--accent2); }
+.pasta-nome { font-size: 11.5px; font-weight: 600; color: var(--text); text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; padding: 0 2px; }
+.pasta-lock-badge { position: absolute; top: 6px; left: 6px; width: 20px; height: 20px; border-radius: 50%; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; }
+.pasta-lock-badge svg { width: 11px; height: 11px; fill: #fff; }
+.pastas-vazio { text-align: center; padding: 20px; color: var(--text2); font-size: 12.5px; }
+
+/* Switch (toggle) */
+.switch-row { display: flex; align-items: center; gap: 10px; margin: 4px 0 18px; }
+.switch { width: 44px; height: 26px; border-radius: 14px; background: var(--surface2); border: 1px solid var(--border); position: relative; cursor: pointer; flex-shrink: 0; transition: background 0.2s; }
+.switch.on { background: var(--accent); border-color: var(--accent); }
+.switch-knob { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: left 0.2s; }
+.switch.on .switch-knob { left: 20px; }
+.switch-label { font-size: 13px; color: var(--text2); font-weight: 600; }
+
+.input-senha-pasta { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 16px; outline: none; margin-bottom: 16px; letter-spacing: 4px; text-align: center; }
+.input-senha-pasta:focus { border-color: var(--accent); }
+.input-senha-pasta::placeholder { color: var(--text2); letter-spacing: normal; font-size: 13px; }
+
+/* Toggle dentro do header da tela da pasta */
+.pasta-header-toggle { display: flex; align-items: center; gap: 6px; }
+.pasta-header-toggle .switch { width: 36px; height: 21px; }
+.pasta-header-toggle .switch-knob { width: 15px; height: 15px; }
+.pasta-header-toggle .switch.on .switch-knob { left: 17px; }
+.pasta-header-toggle .switch-label { font-size: 9.5px; max-width: 70px; line-height: 1.15; }
+.header-direita-pasta { display: flex; align-items: center; gap: 8px; }
+
 /* ===== SENHA ===== */
 .tela-senha { align-items: center; justify-content: center; background: var(--bg); }
 .senha-wrap { width: 100%; max-width: 320px; padding: 20px; display: flex; flex-direction: column; align-items: center; }
@@ -623,9 +663,68 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
   </div>
   <div class="container-grade">
     <div class="grade modo-normal" id="grade"></div>
+    <div class="pastas-section" id="pastas-section-el">
+      <div class="pastas-header-row">
+        <div class="pastas-titulo">Pastas</div>
+        <div class="pastas-header-btns">
+          <div class="pastas-btn" id="btn-sel-pastas" onclick="alternarSelecaoPastas()" title="Selecionar pastas">−</div>
+          <div class="pastas-btn" onclick="abrirCriarPasta()" title="Nova pasta">+</div>
+        </div>
+      </div>
+      <div id="pastas-privadas-wrap" style="display:none;">
+        <div class="pastas-subtitulo">
+          <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+          Pastas Privadas
+        </div>
+        <div class="pastas-grade" id="pastas-grade-privadas"></div>
+      </div>
+      <div id="pastas-normais-wrap" style="display:none;">
+        <div class="pastas-subtitulo">Pastas</div>
+        <div class="pastas-grade" id="pastas-grade-normais"></div>
+      </div>
+    </div>
   </div>
   <div class="barra-sel" id="barra-sel">
     <div class="barra-sel-btn del" onclick="confirmarExcluir()">
+      <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+      <span>Excluir</span>
+    </div>
+  </div>
+  <div class="barra-sel" id="barra-sel-pastas">
+    <div class="barra-sel-btn del" onclick="confirmarExcluirPastas()">
+      <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+      <span>Excluir pasta(s)</span>
+    </div>
+  </div>
+</div>
+
+<!-- TELA PASTA -->
+<div class="tela" id="tela-pasta">
+  <div class="header">
+    <div class="header-left">
+      <div class="menu-btn" onclick="sairDaPasta()">
+        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      </div>
+      <div class="header-title" id="pasta-titulo-header">Pasta</div>
+    </div>
+    <div class="header-direita-pasta">
+      <div class="pasta-header-toggle">
+        <div class="switch" id="switch-pasta-privada" onclick="alternarPrivacidadePastaAtual()">
+          <div class="switch-knob"></div>
+        </div>
+        <div class="switch-label" id="label-switch-pasta">Tornar pasta privada?</div>
+      </div>
+      <div class="btn-add-fotos" id="btn-add-pasta">
+        + Mídia
+        <input type="file" id="pasta-fotos-input" accept="image/*,video/*" multiple onchange="adicionarFotosPasta(this)">
+      </div>
+    </div>
+  </div>
+  <div class="container-grade">
+    <div class="grade modo-normal" id="grade-pasta"></div>
+  </div>
+  <div class="barra-sel" id="barra-sel-pasta-fotos">
+    <div class="barra-sel-btn del" onclick="confirmarExcluirFotosPasta()">
       <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
       <span>Excluir</span>
     </div>
@@ -792,6 +891,43 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
   </div>
 </div>
 
+<!-- MODAL CRIAR PASTA -->
+<div class="modal" id="modal-criar-pasta">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Nova Pasta</div>
+    <input class="input-nome" type="text" id="input-nome-pasta" placeholder="Nome da pasta" maxlength="30">
+    <div class="switch-row">
+      <div class="switch" id="switch-criar-privada" onclick="alternarSwitchCriar()">
+        <div class="switch-knob"></div>
+      </div>
+      <div class="switch-label" id="label-switch-criar">Tornar Pasta Privada?</div>
+    </div>
+    <input class="input-senha-pasta" type="text" inputmode="numeric" pattern="[0-9]*" id="input-senha-criar-pasta" placeholder="Senha da pasta (somente números)" style="display:none;" maxlength="8" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+    <button class="btn-salvar" onclick="salvarNovaPasta()">Criar Pasta</button>
+  </div>
+</div>
+
+<!-- MODAL SENHA PARA ABRIR PASTA PRIVADA -->
+<div class="modal" id="modal-senha-pasta">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="titulo-senha-pasta">Pasta Privada</div>
+    <input class="input-senha-pasta" type="password" inputmode="numeric" pattern="[0-9]*" id="input-senha-abrir-pasta" placeholder="Digite a senha" maxlength="8" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+    <button class="btn-salvar" onclick="tentarAbrirPastaPrivada()">Entrar</button>
+  </div>
+</div>
+
+<!-- MODAL DEFINIR SENHA DA PASTA (quando ativa privacidade dentro da pasta pela 1ª vez) -->
+<div class="modal" id="modal-definir-senha-pasta">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Definir senha da pasta</div>
+    <input class="input-senha-pasta" type="text" inputmode="numeric" pattern="[0-9]*" id="input-nova-senha-pasta" placeholder="Somente números" maxlength="8" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+    <button class="btn-salvar" onclick="confirmarNovaSenhaPasta()">Salvar</button>
+  </div>
+</div>
+
 <!-- MODAL ESCOLHER GALERIA PARA ANEXO -->
 <div class="modal modal-galeria-escolha" id="modal-galeria-escolha">
   <div class="modal-box">
@@ -881,6 +1017,16 @@ let autoSaveTimer = null;
 // Estado do fluxo de anexar foto
 let pinAnexo = '';
 let galeriaParaAnexo = null; // 'normal' | 'privado'
+
+// Estado das PASTAS
+let modoSelecaoPastas = false;
+let pastasSelecionadas = new Set();
+let pastaCriarPrivada = false;
+let pastaSenhaAlvo = null;
+let pastaAbertaId = null;
+let modoSelecaoPastaFotos = false;
+let fotosPastaSelecionadas = new Set();
+let origemView = 'principal'; // 'principal' | 'pasta' -- de onde a tela-view foi aberta
 
 // ===== COMPRESSÃO DE IMAGEM =====
 function comprimirImagem(file) {
@@ -1036,7 +1182,7 @@ function idbDelete(key) {
   }));
 }
 
-const CAMPOS_CONTA = ['fotos_normal', 'fotos_privadas', 'perfil_nome', 'perfil_foto', 'senha_privada', 'notas'];
+const CAMPOS_CONTA = ['fotos_normal', 'fotos_privadas', 'perfil_nome', 'perfil_foto', 'senha_privada', 'notas', 'pastas'];
 let cacheDados = {}; // campo -> valor, da conta atualmente carregada
 
 // Migra dados antigos que ainda estejam no localStorage (versões anteriores do app) para o IndexedDB.
@@ -1084,6 +1230,12 @@ function salvarLista(lista, galeria) {
   const g = galeria !== undefined ? galeria : galeriaAtual;
   setDados(g === 'normal' ? 'fotos_normal' : 'fotos_privadas', lista);
 }
+function getPastas() { return getDados('pastas', []); }
+function salvarPastas(lista) { setDados('pastas', lista); }
+function getPastaById(id) { return getPastas().find(p => p.id === id); }
+function gerarIdPasta() { return 'p_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8); }
+function escapeHTML(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
 function getThumb(item) { return typeof item === 'string' ? item : item.thumb; }
 function getFull(item)  {
   if (typeof item === 'string') return item;
@@ -1275,19 +1427,315 @@ function renderizarGrade() {
   grade.innerHTML = '';
   if (lista.length === 0) {
     grade.innerHTML = `<div class="grade-empty"><div class="icon-empty">${galeriaAtual === 'normal' ? '🖼️' : '🔒'}</div>Nenhuma foto ou vídeo aqui.</div>`;
+  } else {
+    lista.forEach((item, i) => {
+      const el = document.createElement('div');
+      el.className = 'grade-item' + (selecionadas.has(i) ? ' sel' : '');
+      const badge = badgeMidia(item);
+      el.innerHTML = `<img src="${getThumb(item)}" loading="lazy">${badge}<div class="check-circle"></div>`;
+      el.ontouchstart = el.onmousedown = () => timerSegura = setTimeout(() => iniciarSelecao(i, el), 550);
+      el.ontouchend = el.onmouseup = () => clearTimeout(timerSegura);
+      el.onclick = () => { if (modoSelecao) toggleSelecao(i, el); else abrirView(i); };
+      grade.appendChild(el);
+    });
+  }
+  grade.classList.toggle('modo-selecao', modoSelecao);
+  renderizarPastas();
+}
+
+// ===== PASTAS =====
+function iconePastaSVG() {
+  return `<svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>`;
+}
+function iconeCadeadoSVG() {
+  return `<svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>`;
+}
+function renderizarPastas() {
+  const secao = document.getElementById('pastas-section-el');
+  if (!secao) return;
+  if (galeriaAtual !== 'normal') { secao.style.display = 'none'; return; }
+  secao.style.display = '';
+  const pastas = getPastas();
+  const privadas = pastas.filter(p => p.privada);
+  const normais = pastas.filter(p => !p.privada);
+  document.getElementById('pastas-privadas-wrap').style.display = privadas.length ? '' : 'none';
+  document.getElementById('pastas-normais-wrap').style.display = normais.length ? '' : 'none';
+  renderizarGradePastas('pastas-grade-privadas', privadas);
+  renderizarGradePastas('pastas-grade-normais', normais);
+}
+function renderizarGradePastas(containerId, lista) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  lista.forEach(pasta => {
+    const div = document.createElement('div');
+    div.className = 'pasta-item' + (pastasSelecionadas.has(pasta.id) ? ' sel' : '');
+    div.innerHTML = `
+      <div class="pasta-icon${pasta.privada ? ' privada' : ''}">${iconePastaSVG()}</div>
+      <div class="pasta-nome">${escapeHTML(pasta.nome)}</div>
+      ${pasta.privada ? `<div class="pasta-lock-badge">${iconeCadeadoSVG()}</div>` : ''}
+      <div class="check-circle"></div>
+    `;
+    let timerPasta = null;
+    div.ontouchstart = div.onmousedown = () => timerPasta = setTimeout(() => iniciarSelecaoPastas(pasta.id, div), 550);
+    div.ontouchend = div.onmouseup = () => clearTimeout(timerPasta);
+    div.onclick = () => { if (modoSelecaoPastas) toggleSelecaoPasta(pasta.id, div); else abrirPasta(pasta.id); };
+    el.appendChild(div);
+  });
+}
+
+// Seleção (modo de exclusão) de pastas
+function iniciarSelecaoPastas(id, el) {
+  modoSelecaoPastas = true;
+  document.getElementById('barra-sel-pastas').classList.add('vis');
+  toggleSelecaoPasta(id, el);
+}
+function toggleSelecaoPasta(id, el) {
+  if (pastasSelecionadas.has(id)) pastasSelecionadas.delete(id); else pastasSelecionadas.add(id);
+  el.classList.toggle('sel', pastasSelecionadas.has(id));
+  if (pastasSelecionadas.size === 0) sairSelecaoPastas(); else renderizarPastas();
+}
+function sairSelecaoPastas() {
+  modoSelecaoPastas = false;
+  pastasSelecionadas.clear();
+  document.getElementById('barra-sel-pastas').classList.remove('vis');
+  renderizarPastas();
+}
+function alternarSelecaoPastas() {
+  if (modoSelecaoPastas) { sairSelecaoPastas(); return; }
+  if (getPastas().length === 0) { mostrarToast('Nenhuma pasta criada ainda.', 'erro'); return; }
+  modoSelecaoPastas = true;
+  document.getElementById('barra-sel-pastas').classList.add('vis');
+  renderizarPastas();
+}
+function confirmarExcluirPastas() {
+  abrirConfirm('Excluir pasta(s)?', 'As fotos e vídeos dentro delas também serão apagados.', () => {
+    const lista = getPastas().filter(p => !pastasSelecionadas.has(p.id));
+    salvarPastas(lista);
+    sairSelecaoPastas();
+  });
+}
+
+// Criar pasta
+function abrirCriarPasta() {
+  document.getElementById('input-nome-pasta').value = '';
+  document.getElementById('input-senha-criar-pasta').value = '';
+  document.getElementById('input-senha-criar-pasta').style.display = 'none';
+  pastaCriarPrivada = false;
+  document.getElementById('switch-criar-privada').classList.remove('on');
+  document.getElementById('label-switch-criar').textContent = 'Tornar Pasta Privada?';
+  document.getElementById('label-switch-criar').style.display = '';
+  document.getElementById('modal-criar-pasta').classList.add('vis');
+}
+function fecharCriarPasta() { document.getElementById('modal-criar-pasta').classList.remove('vis'); }
+function alternarSwitchCriar() {
+  pastaCriarPrivada = !pastaCriarPrivada;
+  document.getElementById('switch-criar-privada').classList.toggle('on', pastaCriarPrivada);
+  document.getElementById('label-switch-criar').style.display = pastaCriarPrivada ? 'none' : '';
+  document.getElementById('input-senha-criar-pasta').style.display = pastaCriarPrivada ? '' : 'none';
+  if (!pastaCriarPrivada) document.getElementById('input-senha-criar-pasta').value = '';
+}
+function salvarNovaPasta() {
+  const nome = document.getElementById('input-nome-pasta').value.trim();
+  if (!nome) { mostrarToast('Digite um nome para a pasta.', 'erro'); return; }
+  let senha = null;
+  if (pastaCriarPrivada) {
+    senha = document.getElementById('input-senha-criar-pasta').value.trim();
+    if (!senha || !/^[0-9]+$/.test(senha)) { mostrarToast('Digite uma senha (somente números).', 'erro'); return; }
+  }
+  const pastas = getPastas();
+  pastas.push({ id: gerarIdPasta(), nome, privada: pastaCriarPrivada, senha, fotos: [] });
+  salvarPastas(pastas);
+  fecharCriarPasta();
+  renderizarPastas();
+  mostrarToast('Pasta criada!');
+}
+
+// Abrir pasta (pede senha se privada)
+function abrirPasta(id) {
+  const pasta = getPastaById(id);
+  if (!pasta) return;
+  if (pasta.privada) {
+    pastaSenhaAlvo = id;
+    document.getElementById('titulo-senha-pasta').textContent = pasta.nome;
+    document.getElementById('input-senha-abrir-pasta').value = '';
+    document.getElementById('modal-senha-pasta').classList.add('vis');
     return;
   }
-  lista.forEach((item, i) => {
-    const el = document.createElement('div');
-    el.className = 'grade-item' + (selecionadas.has(i) ? ' sel' : '');
-    const badge = badgeMidia(item);
-    el.innerHTML = `<img src="${getThumb(item)}" loading="lazy">${badge}<div class="check-circle"></div>`;
-    el.ontouchstart = el.onmousedown = () => timerSegura = setTimeout(() => iniciarSelecao(i, el), 550);
-    el.ontouchend = el.onmouseup = () => clearTimeout(timerSegura);
-    el.onclick = () => { if (modoSelecao) toggleSelecao(i, el); else abrirView(i); };
-    grade.appendChild(el);
+  entrarNaPasta(id);
+}
+function fecharModalSenhaPasta() { document.getElementById('modal-senha-pasta').classList.remove('vis'); pastaSenhaAlvo = null; }
+function tentarAbrirPastaPrivada() {
+  const pasta = getPastaById(pastaSenhaAlvo);
+  if (!pasta) return;
+  const digitado = document.getElementById('input-senha-abrir-pasta').value.trim();
+  if (digitado && digitado === String(pasta.senha)) {
+    document.getElementById('modal-senha-pasta').classList.remove('vis');
+    entrarNaPasta(pasta.id);
+    pastaSenhaAlvo = null;
+  } else {
+    mostrarToast('Senha incorreta.', 'erro');
+  }
+}
+document.getElementById('input-senha-abrir-pasta').addEventListener('keydown', e => { if (e.key === 'Enter') tentarAbrirPastaPrivada(); });
+
+function entrarNaPasta(id) {
+  pastaAbertaId = id;
+  modoSelecaoPastaFotos = false;
+  fotosPastaSelecionadas.clear();
+  document.getElementById('barra-sel-pasta-fotos').classList.remove('vis');
+  document.getElementById('btn-add-pasta').style.display = '';
+  const pasta = getPastaById(id);
+  document.getElementById('pasta-titulo-header').textContent = pasta.nome;
+  atualizarSwitchPastaAtual();
+  renderizarGradePastaAtual();
+  mudarTela('tela-pasta');
+}
+function sairDaPasta() {
+  if (modoSelecaoPastaFotos) { sairSelecaoPastaFotos(); return; }
+  pastaAbertaId = null;
+  mudarTela('tela-app');
+  renderizarGrade();
+}
+
+// Alternar privacidade da pasta aberta
+function atualizarSwitchPastaAtual() {
+  const pasta = getPastaById(pastaAbertaId);
+  if (!pasta) return;
+  document.getElementById('switch-pasta-privada').classList.toggle('on', pasta.privada);
+  document.getElementById('label-switch-pasta').textContent = pasta.privada ? 'Tornar pasta normal?' : 'Tornar Pasta Privada?';
+}
+function alternarPrivacidadePastaAtual() {
+  const pastas = getPastas();
+  const pasta = pastas.find(p => p.id === pastaAbertaId);
+  if (!pasta) return;
+  if (pasta.privada) {
+    pasta.privada = false; // a senha continua salva, caso ative de novo depois
+    salvarPastas(pastas);
+    atualizarSwitchPastaAtual();
+    mostrarToast('Pasta normal.');
+  } else {
+    if (pasta.senha) {
+      pasta.privada = true;
+      salvarPastas(pastas);
+      atualizarSwitchPastaAtual();
+      mostrarToast('Pasta privada.');
+    } else {
+      document.getElementById('input-nova-senha-pasta').value = '';
+      document.getElementById('modal-definir-senha-pasta').classList.add('vis');
+    }
+  }
+}
+function fecharDefinirSenhaPasta() { document.getElementById('modal-definir-senha-pasta').classList.remove('vis'); }
+function confirmarNovaSenhaPasta() {
+  const senha = document.getElementById('input-nova-senha-pasta').value.trim();
+  if (!senha || !/^[0-9]+$/.test(senha)) { mostrarToast('Digite uma senha (somente números).', 'erro'); return; }
+  const pastas = getPastas();
+  const pasta = pastas.find(p => p.id === pastaAbertaId);
+  if (!pasta) return;
+  pasta.senha = senha;
+  pasta.privada = true;
+  salvarPastas(pastas);
+  document.getElementById('modal-definir-senha-pasta').classList.remove('vis');
+  atualizarSwitchPastaAtual();
+  mostrarToast('Pasta agora é privada.');
+}
+
+// Grade de fotos dentro da pasta aberta
+function renderizarGradePastaAtual() {
+  const pasta = getPastaById(pastaAbertaId);
+  if (!pasta) return;
+  const grade = document.getElementById('grade-pasta');
+  grade.innerHTML = '';
+  const lista = pasta.fotos || [];
+  if (lista.length === 0) {
+    grade.innerHTML = `<div class="grade-empty"><div class="icon-empty">${iconePastaSVG()}</div>Nenhuma foto ou vídeo nesta pasta ainda.</div>`;
+  } else {
+    lista.forEach((item, i) => {
+      const el = document.createElement('div');
+      el.className = 'grade-item' + (fotosPastaSelecionadas.has(i) ? ' sel' : '');
+      const badge = badgeMidia(item);
+      el.innerHTML = `<img src="${getThumb(item)}" loading="lazy">${badge}<div class="check-circle"></div>`;
+      let timerPF = null;
+      el.ontouchstart = el.onmousedown = () => timerPF = setTimeout(() => iniciarSelecaoPastaFotos(i, el), 550);
+      el.ontouchend = el.onmouseup = () => clearTimeout(timerPF);
+      el.onclick = () => { if (modoSelecaoPastaFotos) toggleSelecaoPastaFoto(i, el); else abrirViewPastaFoto(i); };
+      grade.appendChild(el);
+    });
+  }
+  grade.classList.toggle('modo-selecao', modoSelecaoPastaFotos);
+}
+function iniciarSelecaoPastaFotos(i, el) {
+  modoSelecaoPastaFotos = true;
+  document.getElementById('barra-sel-pasta-fotos').classList.add('vis');
+  document.getElementById('btn-add-pasta').style.display = 'none';
+  toggleSelecaoPastaFoto(i, el);
+}
+function toggleSelecaoPastaFoto(i, el) {
+  if (fotosPastaSelecionadas.has(i)) fotosPastaSelecionadas.delete(i); else fotosPastaSelecionadas.add(i);
+  el.classList.toggle('sel', fotosPastaSelecionadas.has(i));
+  if (fotosPastaSelecionadas.size === 0) sairSelecaoPastaFotos(); else renderizarGradePastaAtual();
+}
+function sairSelecaoPastaFotos() {
+  modoSelecaoPastaFotos = false;
+  fotosPastaSelecionadas.clear();
+  document.getElementById('barra-sel-pasta-fotos').classList.remove('vis');
+  document.getElementById('btn-add-pasta').style.display = '';
+  renderizarGradePastaAtual();
+}
+function confirmarExcluirFotosPasta() {
+  abrirConfirm('Excluir?', 'Excluir selecionadas?', () => {
+    const pastas = getPastas();
+    const pasta = pastas.find(p => p.id === pastaAbertaId);
+    if (!pasta) return;
+    pasta.fotos = pasta.fotos.filter((_, i) => !fotosPastaSelecionadas.has(i));
+    salvarPastas(pastas);
+    sairSelecaoPastaFotos();
   });
-  grade.classList.toggle('modo-selecao', modoSelecao);
+}
+async function adicionarFotosPasta(input) {
+  const idPastaClique = pastaAbertaId;
+  const files = Array.from(input.files);
+  input.value = '';
+  const LIMITE_VIDEO = 500 * 1024 * 1024;
+  const LIMITE_GIF = 50 * 1024 * 1024;
+  for (const file of files) {
+    const ehVideo = file.type.startsWith('video/');
+    const ehGif = file.type === 'image/gif';
+    if (ehVideo && file.size > LIMITE_VIDEO) { mostrarToast('Vídeo muito grande (máx. 500MB).', 'erro'); continue; }
+    if (ehGif && file.size > LIMITE_GIF) { mostrarToast('Gif muito grande (máx. 50MB).', 'erro'); continue; }
+    const grade = document.getElementById('grade-pasta');
+    const placeholder = document.createElement('div');
+    placeholder.className = 'grade-item loading';
+    if (pastaAbertaId === idPastaClique) grade.appendChild(placeholder);
+    try {
+      const item = ehVideo ? await processarVideo(file) : ehGif ? await processarGif(file) : await comprimirImagem(file);
+      const pastas = getPastas();
+      const pasta = pastas.find(p => p.id === idPastaClique);
+      if (!pasta) continue;
+      pasta.fotos.push(item);
+      salvarPastas(pastas);
+      if (pastaAbertaId === idPastaClique) renderizarGradePastaAtual();
+    } catch(e) {
+      mostrarToast('Erro ao processar arquivo.', 'erro');
+      if (placeholder.parentNode) placeholder.remove();
+    }
+  }
+}
+function abrirViewPastaFoto(idx) {
+  origemView = 'pasta';
+  const pasta = getPastaById(pastaAbertaId);
+  const lista = pasta.fotos;
+  const car = document.getElementById('carrossel');
+  car.innerHTML = '';
+  lista.forEach(item => {
+    const s = document.createElement('div');
+    s.className = 'foto-slide';
+    if (getTipo(item) === 'video') s.innerHTML = `<video src="${getFull(item)}" controls playsinline preload="metadata"></video>`;
+    else s.innerHTML = `<img src="${getFull(item)}">`;
+    car.appendChild(s);
+  });
+  mudarTela('tela-view');
+  setTimeout(() => car.scrollTo({ left: window.innerWidth * idx, behavior: 'instant' }), 30);
 }
 function iniciarSelecao(i, el) {
   modoSelecao = true;
@@ -1349,6 +1797,7 @@ function confirmarExcluir() {
 
 // ===== VIEW FOTO =====
 function abrirView(idx) {
+  origemView = 'principal';
   const lista = getLista();
   const car = document.getElementById('carrossel');
   car.innerHTML = '';
@@ -1367,11 +1816,17 @@ function abrirView(idx) {
 }
 function fecharView() {
   document.querySelectorAll('#carrossel video').forEach(v => v.pause());
-  mudarTela('tela-app'); renderizarGrade();
+  if (origemView === 'pasta') {
+    mudarTela('tela-pasta');
+    renderizarGradePastaAtual();
+    origemView = 'principal';
+  } else {
+    mudarTela('tela-app'); renderizarGrade();
+  }
 }
 function getIdxView() { return Math.round(document.getElementById('carrossel').scrollLeft / window.innerWidth); }
 function baixarFoto() {
-  const item = getLista()[getIdxView()];
+  const item = origemView === 'pasta' ? getPastaById(pastaAbertaId).fotos[getIdxView()] : getLista()[getIdxView()];
   const tipo = getTipo(item);
   const a = document.createElement('a'); a.href = getFull(item);
   if (tipo === 'video' || tipo === 'gif') {
@@ -1386,9 +1841,18 @@ function baixarFoto() {
 function excluirFotoView() {
   abrirConfirm('Excluir?', 'Excluir esta foto?', () => {
     const idx = getIdxView();
-    const lista = getLista();
-    lista.splice(idx, 1); salvarLista(lista);
-    if (lista.length === 0) fecharView(); else abrirView(Math.min(idx, lista.length - 1));
+    if (origemView === 'pasta') {
+      const pastas = getPastas();
+      const pasta = pastas.find(p => p.id === pastaAbertaId);
+      if (!pasta) return;
+      pasta.fotos.splice(idx, 1);
+      salvarPastas(pastas);
+      if (pasta.fotos.length === 0) fecharView(); else abrirViewPastaFoto(Math.min(idx, pasta.fotos.length - 1));
+    } else {
+      const lista = getLista();
+      lista.splice(idx, 1); salvarLista(lista);
+      if (lista.length === 0) fecharView(); else abrirView(Math.min(idx, lista.length - 1));
+    }
   });
 }
 
@@ -1740,6 +2204,9 @@ document.getElementById('carrossel').addEventListener('scroll', () => {
   document.querySelectorAll('#carrossel video').forEach((v, i) => { if (i !== idx) v.pause(); });
 });
 document.getElementById('modal-perfil').addEventListener('click', e => { if (e.target.id === 'modal-perfil') e.target.classList.remove('vis'); });
+document.getElementById('modal-criar-pasta').addEventListener('click', e => { if (e.target.id === 'modal-criar-pasta') e.target.classList.remove('vis'); });
+document.getElementById('modal-senha-pasta').addEventListener('click', e => { if (e.target.id === 'modal-senha-pasta') e.target.classList.remove('vis'); });
+document.getElementById('modal-definir-senha-pasta').addEventListener('click', e => { if (e.target.id === 'modal-definir-senha-pasta') e.target.classList.remove('vis'); });
 document.getElementById('modal-galeria-escolha').addEventListener('click', e => { if (e.target.id === 'modal-galeria-escolha') e.target.classList.remove('vis'); });
 document.getElementById('modal-selecionar-foto').addEventListener('click', e => { if (e.target.id === 'modal-selecionar-foto') e.target.classList.remove('vis'); });
 ['auth-email', 'auth-senha', 'auth-confirmar'].forEach(id => {
