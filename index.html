@@ -624,10 +624,6 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
       <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
       <span>Fotos</span>
     </div>
-    <div class="drawer-item" id="item-pastas" onclick="irParaPastas()">
-      <svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
-      <span>Pastas</span>
-    </div>
     <div class="drawer-item" id="item-privado" onclick="irParaPrivado()">
       <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
       <span>Fotos Privadas</span>
@@ -667,31 +663,14 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
   </div>
   <div class="container-grade">
     <div class="grade modo-normal" id="grade"></div>
-  </div>
-  <div class="barra-sel" id="barra-sel">
-    <div class="barra-sel-btn del" onclick="confirmarExcluir()">
-      <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-      <span>Excluir</span>
-    </div>
-  </div>
-</div>
-
-<!-- TELA PASTAS (lista) -->
-<div class="tela" id="tela-pastas">
-  <div class="header">
-    <div class="header-left">
-      <div class="menu-btn" onclick="abrirDrawer()">
-        <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
-      </div>
-      <div class="header-title">Pastas</div>
-    </div>
-    <div class="pastas-header-btns">
-      <div class="pastas-btn" id="btn-sel-pastas" onclick="alternarSelecaoPastas()" title="Selecionar pastas">−</div>
-      <div class="pastas-btn" onclick="abrirCriarPasta()" title="Nova pasta">+</div>
-    </div>
-  </div>
-  <div class="container-grade">
     <div class="pastas-section" id="pastas-section-el">
+      <div class="pastas-header-row">
+        <div class="pastas-titulo">Pastas</div>
+        <div class="pastas-header-btns">
+          <div class="pastas-btn" id="btn-sel-pastas" onclick="alternarSelecaoPastas()" title="Selecionar pastas">−</div>
+          <div class="pastas-btn" onclick="abrirCriarPasta()" title="Nova pasta">+</div>
+        </div>
+      </div>
       <div id="pastas-privadas-wrap" style="display:none;">
         <div class="pastas-subtitulo">
           <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
@@ -703,7 +682,12 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
         <div class="pastas-subtitulo">Pastas</div>
         <div class="pastas-grade" id="pastas-grade-normais"></div>
       </div>
-      <div class="pastas-vazio" id="pastas-vazio-msg" style="display:none;">Nenhuma pasta criada ainda.<br>Toque em “+” para criar a primeira.</div>
+    </div>
+  </div>
+  <div class="barra-sel" id="barra-sel">
+    <div class="barra-sel-btn del" onclick="confirmarExcluir()">
+      <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+      <span>Excluir</span>
     </div>
   </div>
   <div class="barra-sel" id="barra-sel-pastas">
@@ -1408,17 +1392,11 @@ function irParaNotas() {
   fecharDrawer(); galeriaAtual = 'notas';
   atualizarItemAtivo(); renderizarNotas(); mudarTela('tela-notas');
 }
-function irParaPastas() {
-  fecharDrawer(); galeriaAtual = 'pastas';
-  sairSelecaoPastas();
-  atualizarItemAtivo(); renderizarPastas(); mudarTela('tela-pastas');
-}
 function voltarDaSenha() { irParaFotos(); }
 function atualizarItemAtivo() {
   document.getElementById('item-fotos').classList.toggle('ativo', galeriaAtual === 'normal');
   document.getElementById('item-privado').classList.toggle('ativo', galeriaAtual === 'privado');
   document.getElementById('item-notas').classList.toggle('ativo', galeriaAtual === 'notas');
-  document.getElementById('item-pastas').classList.toggle('ativo', galeriaAtual === 'pastas');
 }
 function mudarTela(id) { document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa')); document.getElementById(id).classList.add('ativa'); }
 
@@ -1462,6 +1440,7 @@ function renderizarGrade() {
     });
   }
   grade.classList.toggle('modo-selecao', modoSelecao);
+  renderizarPastas();
 }
 
 // ===== PASTAS =====
@@ -1472,12 +1451,15 @@ function iconeCadeadoSVG() {
   return `<svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>`;
 }
 function renderizarPastas() {
+  const secao = document.getElementById('pastas-section-el');
+  if (!secao) return;
+  if (galeriaAtual !== 'normal') { secao.style.display = 'none'; return; }
+  secao.style.display = '';
   const pastas = getPastas();
   const privadas = pastas.filter(p => p.privada);
   const normais = pastas.filter(p => !p.privada);
   document.getElementById('pastas-privadas-wrap').style.display = privadas.length ? '' : 'none';
   document.getElementById('pastas-normais-wrap').style.display = normais.length ? '' : 'none';
-  document.getElementById('pastas-vazio-msg').style.display = pastas.length === 0 ? '' : 'none';
   renderizarGradePastas('pastas-grade-privadas', privadas);
   renderizarGradePastas('pastas-grade-normais', normais);
 }
@@ -1611,8 +1593,8 @@ function entrarNaPasta(id) {
 function sairDaPasta() {
   if (modoSelecaoPastaFotos) { sairSelecaoPastaFotos(); return; }
   pastaAbertaId = null;
-  renderizarPastas();
-  mudarTela('tela-pastas');
+  mudarTela('tela-app');
+  renderizarGrade();
 }
 
 // Alternar privacidade da pasta aberta
